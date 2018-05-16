@@ -1,7 +1,7 @@
 # backupDatabase
 Script to perform a database backup using **MySQL** and **Postgres** dump utilities.
 
-This project currently run on Linux.
+This project currently runs on Linux.
 
 
 ### Changelog
