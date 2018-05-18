@@ -7,7 +7,7 @@ This project currently runs on Linux.
 ### Changelog
 
   - Updated README file
-  - Support Windows paths
+  - Support Windows dump scripts execution (Not tested yet!)
 
 
 ### Requirements
