@@ -3,7 +3,7 @@
 
 # Developed by Cristian Bottazzi
 # 13/05/2018
-# Last review: 16/05/2018
+# Last review: 17/05/2018
 # Description: Make a backup from the selected databases on MySQL or Postgres and
 # creates a dump SQL file (with creation schema)
 # Working on Linux. Next updates: work on Windows
@@ -15,6 +15,7 @@ from datetime import datetime, date, time, timedelta
 import sys
 import os.path
 from subprocess import call
+import platform
 import pexpect
 
 #PARAMS:
@@ -46,11 +47,19 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
 engine = sys.argv[1]
 
 if len(sys.argv) >= 3:
-  print("Using custom path to backup file")
-  route = sys.argv[2] + '/'
+  print("Using custom path to backup files")
+  route = sys.argv[2]
+  if not route.endswith('/') or not route.endswith('\\'):
+    if (platform.system() == 'Linux'):
+      route = route + '/'
+    if (platform.system() == 'Windows'):
+      route = route + '\\'
 else:
     print("Missing argument for output location. Using home dir by default")
-    route = os.getenv("HOME") + '/'
+    if (platform.system() == 'Linux'):
+      route = os.getenv("HOME") + '/'
+    if (platform.system() == 'Windows'):
+      route = os.path.expanduser('~') + '\\'
 
 outputDir = route
 
