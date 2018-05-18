@@ -69,7 +69,7 @@ The filename will be **`backup_DATABASENAME_DATETIME.sql`**.
 
 On next versions I will go to implement:
 
-- Execute with Pexpect commands on Windows
+- Test on Windows (with Python 3.6.5)
 - Improve the documentation (this file)
 
 

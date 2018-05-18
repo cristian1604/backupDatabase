@@ -3,7 +3,7 @@
 
 # Developed by Cristian Bottazzi
 # 13/05/2018
-# Last review: 17/05/2018
+# Last review: 18/05/2018
 # Description: Make a backup from the selected databases on MySQL or Postgres and
 # creates a dump SQL file (with creation schema)
 # Working on Linux. Next updates: work on Windows
@@ -39,7 +39,7 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
   print("DbEngine   <- Database engine (can be mysql or postgres)")
   print("path       <- Path to save the SQL file")
   print("Example:")
-  print("python backup.py mysql /home/user/backups")
+  print("python backup.py mysql /home/my_user/backups/")
   print("to perform a backup on the backups directory")
   print("")
   quit()
@@ -67,7 +67,10 @@ for database in databases:
   filename = 'backup_' + database +'_'+ datetime.now().strftime("%Y-%m-%d_%H:%M") + '.sql'
   if engine == 'mysql':
     cmd = appMySqlDirectory + ' --user='+username+' -p --host="'+host+'" --protocol=tcp --port='+port+' --default-character-set=utf8 --single-transaction=TRUE --result-file='+outputDir+filename+' --routines --events "'+ database +'"'
-    child = pexpect.spawn(cmd)
+    if (platform.system() == 'Linux'):
+      child = pexpect.spawn(cmd)
+    if (platform.system() == 'Windows'):
+      child = pexpect.popen_spawn.PopenSpawn(cmd)
     child.expect('Enter password: ')
     child.sendline(password)
     child.interact()
@@ -75,7 +78,10 @@ for database in databases:
 
   if engine == 'postgres':
     cmd = appPgDumpDirectory + ' -U '+username+' -W --host="'+host+'" -d '+database+' -f '+outputDir+filename
-    child = pexpect.spawn(cmd)
+    if (platform.system() == 'Linux'):
+      child = pexpect.spawn(cmd)
+    if (platform.system() == 'Windows'):
+      child = pexpect.popen_spawn.PopenSpawn(cmd)
     child.expect('Password: ')
     child.sendline(password)
     child.interact()
