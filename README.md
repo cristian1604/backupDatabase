@@ -7,7 +7,7 @@ This project currently runs on Linux.
 ### Changelog
 
   - Updated README file
-  - Support to realize a backup of multipe databases
+  - Support Windows paths
 
 
 ### Requirements
@@ -69,7 +69,7 @@ The filename will be **`backup_DATABASENAME_DATETIME.sql`**.
 
 On next versions I will go to implement:
 
-- Support Windows paths
+- Execute with Pexpect commands on Windows
 - Improve the documentation (this file)
 
 
