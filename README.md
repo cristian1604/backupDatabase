@@ -1,13 +1,14 @@
 # backupDatabase
 Script to perform a database backup using **MySQL** and **Postgres** dump utilities.
 
+With this script you can backup several databases from a DB engine at the same time.
+
 This project currently runs on Linux.
 
 
 ### Changelog
 
-  - Updated README file
-  - Support Windows dump scripts execution (Not tested yet!)
+  - Clean up the code to make it more readable (Work in progress)
 
 
 ### Requirements
@@ -15,7 +16,7 @@ This project currently runs on Linux.
 - [Pexpect][Pexpect] - A Python module for controlling interactive programs in a pseudo-terminal
 - By default the binaries for dump the databases are provided on this repository (only for Linux). But you can set your database binaries.
 
-To install Pexpect simply run:
+If you have `pip`, to install Pexpect simply run:
 
     python -m pip install pexpect
 
@@ -27,12 +28,14 @@ Parameters:
 On `backup.py` there is a list of parameters between lines 21 and 27:
 
     databases = ['DATABASE1', 'DATABASE2', ..., 'DATABASEn']
-    host='HOST'
-    username='MY_USERNAME'
+    host='HOST'                        # URL or IP to the database server
+    username='MY_USERNAME'             # For security reasons I recommend a backup user only
     password='MY_PASSWORD'
     port='PORT'                        # 5432 (default for Postgres), 3306 (default for MySQL)
     appMySqlDirectory = './mysqldump'  # Directory to mysqldump binary (executable on Windows)
     appPgDumpDirectory = './pg_dump'   # Directory to pg_dump binary (executable on Windows)
+
+Note: On this repository I've uploaded the `mysqldump` and `pg_dump` utilities. But I recommend to use the binaries provided on your database engine.
 
 
 ### Example
@@ -69,8 +72,9 @@ The filename will be **`backup_DATABASENAME_DATETIME.sql`**.
 
 On next versions I will go to implement:
 
+- Clean up the code
+- Autodetect if the dump script is avaiable on the system before use the included on repository
 - Test on Windows (with Python 3.6.5)
-- Improve the documentation (this file)
 
 
 ### Why this script?
