@@ -3,17 +3,18 @@ Script to perform a database backup using **MySQL** and **Postgres** dump utilit
 
 With this script you can backup several databases from a DB engine at the same time.
 
-This project currently runs on Linux.
+**This project currently runs on Linux.**
 
 
 ### Changelog
 
   - Clean up the code to make it more readable (Work in progress)
+  - Test with sevearl Postgres databases
 
 
 ### Requirements
 
-- [Pexpect][Pexpect] - A Python module for controlling interactive programs in a pseudo-terminal
+- [Pexpect][Pexpect] - A Python module for controlling interactive programs in a pseudo-terminal (this dependence soon will be going removed)
 - By default the binaries for dump the databases are provided on this repository (only for Linux). But you can set your database binaries.
 
 If you have `pip`, to install Pexpect simply run:
@@ -75,6 +76,7 @@ On next versions I will go to implement:
 - Clean up the code
 - Autodetect if the dump script is avaiable on the system before use the included on repository
 - Test on Windows (with Python 3.6.5)
+- Remove Pexpect as dependence due several issues on Windows
 
 
 ### Why this script?
