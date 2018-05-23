@@ -1,22 +1,19 @@
 # -*- encoding: utf-8 -*-
 # -*- coding: utf-8 -*- 
 
-# Developed by Cristian Bottazzi
+# Written by Cristian Bottazzi
 # 13/05/2018
-# Last review: 19/05/2018
+# Last review: 23/05/2018
 # Description: Make a backup from the selected databases on MySQL or Postgres and
 # creates a dump SQL file (with creation schema)
-# Working on Linux. Next updates: work on Windows
+# Currently runs on Linux.
 #
-# Dependences: Pexpect (https://github.com/pexpect/pexpect)
-# A Python module for controlling interactive programs in a pseudo-terminal
 
 from datetime import datetime, date, time, timedelta
 import sys
 import os.path
 from subprocess import call
 import platform
-import pexpect
 
 #PARAMS:
 databases = ['DB_NAME1','DB_NAME2']
@@ -26,15 +23,6 @@ password='PASSWORD'
 port='PORT'
 appMySqlDirectory = './mysqldump'
 appPgDumpDirectory = './pg_dump'
-
-def run( cmd ):
-  "Execute the command on Windows/Linux"
-  child = ''
-  if (OS == 'Linux'):
-    child = pexpect.spawn(cmd)
-  if (OS == 'Windows'):
-    child = pexpect.popen_spawn.PopenSpawn(cmd)
-  return child
 
 if len(sys.argv) == 1:
   print("Enter database engine: 'mysql' or 'postgres'")
@@ -66,32 +54,21 @@ if len(sys.argv) >= 3:
       route = route + '\\'
 else:
     print("Missing argument for output location. Using home dir by default")
-    if (OS == 'Linux'):
-      route = os.getenv("HOME") + '/'
-    if (OS == 'Windows'):
-      route = os.path.expanduser('~') + '\\'
-
-outputDir = route
+    route = homedir
 
 for database in databases:
   filename = 'backup_' + database +'_'+ datetime.now().strftime("%Y-%m-%d_%H:%M") + '.sql'
   if engine == 'mysql':
-    cmd = appMySqlDirectory + ' --user='+username+' -p --host="'+host+'" --protocol=tcp --port='+port+' --default-character-set=utf8 --single-transaction=TRUE --result-file='+outputDir+filename+' --routines --events "'+ database +'"'
-    child = run(cmd)
-    child.expect('Enter password: ')
-    child.sendline(password)
-    child.interact()
+    cmd = appMySqlDirectory + ' --user='+username+' -p'+password+' --host="'+host+'" --protocol=tcp --port='+port+' --default-character-set=utf8 --single-transaction=TRUE --result-file='+route+filename+' --routines --events "'+ database +'"'
+    os.system(cmd)
     print('[DONE]: Backup for [' + database + '] has finished.')
 
   if engine == 'postgres':
-    cmd = appPgDumpDirectory + ' -U '+username+' -W --host="'+host+'" -d '+database+' -f '+outputDir+filename
-    child = run(cmd)
-    child.expect('Password: ')
-    child.sendline(password)
-    child.interact()
+    cmd = appPgDumpDirectory + ' --dbname=postgresql://'+username+':'+password+'@'+host+':'+port+'/'+database+' > '+route+filename
+    os.system(cmd)
     print('[DONE]: Backup for [' + database + '] has finished.')
 
 if engine == 'mysql' or engine == 'postgres':
-  print('[FINISHED]: Backup created on ' + outputDir)
+  print('[FINISHED]: Backup created on ' + route)
 else:
   print('[ERROR]: Must select a correct database engine: mysql or postrges')
