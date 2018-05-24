@@ -3,7 +3,7 @@
 
 # Written by Cristian Bottazzi
 # 13/05/2018
-# Last review: 23/05/2018
+# Last review: 24/05/2018
 # Description: Make a backup from the selected databases on MySQL or Postgres and
 # creates a dump SQL file (with creation schema)
 # Currently runs on Linux.
@@ -54,7 +54,10 @@ if len(sys.argv) >= 3:
       route = route + '\\'
 else:
     print("Missing argument for output location. Using home dir by default")
-    route = homedir
+    if (OS == 'Linux'):
+      route = os.getenv("HOME") + '/'
+    if (OS == 'Windows'):
+      route = os.path.expanduser('~') + '\\'
 
 for database in databases:
   filename = 'backup_' + database +'_'+ datetime.now().strftime("%Y-%m-%d_%H:%M") + '.sql'
