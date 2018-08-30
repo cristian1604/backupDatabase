@@ -1,5 +1,5 @@
 # backupDatabase
-Script to perform a database backup using **MySQL** and **Postgres** dump utilities.
+This is a *wrapper-script* to perform a database backup using **MySQL** and **Postgres** dump utilities.
 
 With this script you can backup several databases from a DB engine at the same time.
 
@@ -8,27 +8,27 @@ With this script you can backup several databases from a DB engine at the same t
 
 ### Changelog
 
-  - Removed all [Pexpect][Pexpect] dependences: Due to the incompatibilities with Windows I have decided to remove Pexpect (one step closer towards Windows compatibility)
+  - Improve documentation
   - Tested on multiple MySQL and Postgres databases (one script to call each DB engine)
-  - Clean up code
+  - Comment code
 
 
 ### Requirements
 
-- By default the binaries for dump the databases are provided on this repository (only for Linux). But if you run this script on the database server, I recommend strongly use the provided database binaries.
+- By default only the pgdump binary (for linux) is provided on this repository. But if you run this script on the database server, I recommend strongly use the provided binaries by the database engine.
 
 
 ### How to set parameters
 
 Parameters:
 
-On `backup.py` there is a list of parameters between lines 21 and 27:
+On `backup.py` there is a list of parameters between lines 21 and 28:
 
     databases = ['DATABASE1', 'DATABASE2', ..., 'DATABASEn']
     host='HOST'                        # URL or IP to the database server
+    port='PORT'                        # 5432 (default for Postgres), 3306 (default for MySQL)
     username='MY_USERNAME'             # For security reasons I recommend a backup user only
     password='MY_PASSWORD'
-    port='PORT'                        # 5432 (default for Postgres), 3306 (default for MySQL)
     appMySqlDirectory = './mysqldump'  # Directory to mysqldump binary (executable on Windows)
     appPgDumpDirectory = './pg_dump'   # Directory to pg_dump binary (executable on Windows)
 
@@ -39,11 +39,11 @@ Note: On this repository I've uploaded the `mysqldump` and `pg_dump` utilities. 
 
 The script support two parameters:
 
-`engine`  -  To set the database: `mysql` or `postgres`
+`engine`  -  To set the database: `mysql` or `postgres` (or `pg` to abbreviate)
 
-`outputFile`  -  Set the location to the sql dump file (by default, home dir)
+`outputFile`  -  Set the location to the sql dump file (if this field is empty, by default, home dir)
 
-With all the parameters setted correctly (and intalled dependences), simply run:
+With all the parameters setted correctly, simply run:
 
 **MySQL backup**
 
