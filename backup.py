@@ -3,11 +3,13 @@
 
 # Written by Cristian Bottazzi
 # 13/05/2018
-# Last review: 24/05/2018
-# Description: Make a backup from the selected databases on MySQL or Postgres and
+# Last review: 29/08/2018
+# Description: Wrapper a backup from the selected databases on MySQL or Postgres and
 # creates a dump SQL file (with creation schema)
-# Currently runs on Linux.
+# Currently runs on Linux. On Windows it's experimental
 #
+# Edit the #PARAMS here, and then run:
+# python backup.py [mysql | postgres] [output_dir]
 
 from datetime import datetime, date, time, timedelta
 import sys
@@ -15,14 +17,16 @@ import os.path
 from subprocess import call
 import platform
 
-#PARAMS:
+#PARAMS: ----------------------------------------------
 databases = ['DB_NAME1','DB_NAME2']
-host='HOST'
-username='USER'
+host='HOST'                           # URL or IP to the database server
+port='PORT'                           # 5432 (default for Postgres), 3306 (default for MySQL)
+username='USER'                       # For security reasons I recommend a backup user only
 password='PASSWORD'
-port='PORT'
-appMySqlDirectory = './mysqldump'
-appPgDumpDirectory = './pg_dump'
+# Route to the dump utilities
+appMySqlDirectory = './mysqldump'     # Directory to mysqldump binary (executable on Windows)
+appPgDumpDirectory = './pg_dump'      # Directory to pg_dump binary (executable on Windows)
+# -----------------------------------------------------
 
 if len(sys.argv) == 1:
   print("Enter database engine: 'mysql' or 'postgres'")
@@ -66,12 +70,12 @@ for database in databases:
     os.system(cmd)
     print('[DONE]: Backup for [' + database + '] has finished.')
 
-  if engine == 'postgres':
+  if engine == 'postgres' or engine == 'pg':
     cmd = appPgDumpDirectory + ' --dbname=postgresql://'+username+':'+password+'@'+host+':'+port+'/'+database+' > '+route+filename
     os.system(cmd)
     print('[DONE]: Backup for [' + database + '] has finished.')
 
 if engine == 'mysql' or engine == 'postgres':
-  print('[FINISHED]: Backup created on ' + route)
+  print('[FINISHED]: Backup created on ' + route + '. REMEMBER: Check the file. Sometimes the backup can fail')
 else:
   print('[ERROR]: Must select a correct database engine: mysql or postrges')
